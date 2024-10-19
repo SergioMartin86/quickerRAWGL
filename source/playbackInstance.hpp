@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RAWInstance.hpp"
+#include "RAWGLInstance.hpp"
 #include <string>
 #include <jaffarCommon/hash.hpp>
 #include <jaffarCommon/exceptions.hpp>

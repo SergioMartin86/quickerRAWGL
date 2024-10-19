@@ -9,7 +9,7 @@
 #include <jaffarCommon/timing.hpp>
 #include <jaffarCommon/logger.hpp>
 #include <jaffarCommon/file.hpp>
-#include "RAWInstance.hpp"
+#include "RAWGLInstance.hpp"
 #include <chrono>
 #include <sstream>
 #include <vector>
