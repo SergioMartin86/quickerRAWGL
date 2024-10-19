@@ -1,6 +1,4 @@
 nomalloc = environment({'MALLOC_PERTURB_': '0'})
-
-bash = find_program('bash')
 testTimeout = 240
 
 testSet = [ 
@@ -10,9 +8,9 @@ testSet = [
 # Adding tests to the suite
 foreach testFile : testSet
   test(testFile,
-       bash,
+       quickerRAWTester,
        workdir : meson.current_source_dir(),
        timeout: testTimeout,
-       args : [ 'run_test.sh', quickerRAWTester.path(), testFile + '.test', testFile + '.sol' ],
-       suite : [ 'smbc' ])
+       args : [ testFile + '.test', testFile + '.sol' ],
+  )
 endforeach

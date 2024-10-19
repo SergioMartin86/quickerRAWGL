@@ -221,6 +221,18 @@ void enableStateBlockImpl(const std::string& block)
 
   void advanceStateImpl(const jaffar::input_t &input) override
   {
+    e->_stub->_pi.code = false;
+    e->_stub->_pi.dirMask = 0;
+    e->_stub->_pi.action = false;
+    e->_stub->_pi.jump = false;
+
+    if (input.buttonCode) e->_stub->_pi.code = true;
+    if (input.buttonLeft) e->_stub->_pi.dirMask |= PlayerInput::DIR_LEFT;
+    if (input.buttonRight) e->_stub->_pi.dirMask |= PlayerInput::DIR_RIGHT;
+    if (input.buttonDown) e->_stub->_pi.dirMask |= PlayerInput::DIR_DOWN;
+    if (input.buttonUp) { e->_stub->_pi.jump = true; e->_stub->_pi.dirMask |= PlayerInput::DIR_UP; }
+    if (input.buttonFire) e->_stub->_pi.action = true;
+
     e->run();
   }
 

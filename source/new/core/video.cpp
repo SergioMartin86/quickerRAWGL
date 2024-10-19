@@ -16,6 +16,9 @@ thread_local bool _renderEnabled = false;
 
 Video::Video(Resource *res)
 	: _res(res), _graphics(0), _hasHeadSprites(false), _displayHead(true) {
+		_buffers[0] = 0;
+		_buffers[1] = 0;
+		_buffers[2] = 0;
 }
 
 Video::~Video() {
