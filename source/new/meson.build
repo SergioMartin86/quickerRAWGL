@@ -1,6 +1,6 @@
-# quickerRAW Core sources
+# quickerRAWGL Core sources
 
-quickerRAWSrc =  [
+quickerRAWGLSrc =  [
 'core/aifcplayer.cpp',
 'core/bitmap.cpp',
 'core/engine.cpp',
@@ -25,23 +25,23 @@ quickerRAWSrc =  [
 'core/video.cpp',
 ]
 
-quickerRAWIncludeDirs = [
+quickerRAWGLIncludeDirs = [
  '.',
  '..',
  'core'
 ]
 
-quickerRAWCompileArgs = [
+quickerRAWGLCompileArgs = [
   '-DBYPASS_PROTECTION'
 ]
 
-# quickerRAW Core Configuration
+# quickerRAWGL Core Configuration
 
- quickerRAWDependency = declare_dependency(
-  compile_args        : [  quickerRAWCompileArgs ],
+ quickerRAWGLDependency = declare_dependency(
+  compile_args        : [  quickerRAWGLCompileArgs ],
   link_args           : [  '-lz' ],
-  include_directories : include_directories(quickerRAWIncludeDirs),
-  sources             : [ quickerRAWSrc ],
+  include_directories : include_directories(quickerRAWGLIncludeDirs),
+  sources             : [ quickerRAWGLSrc ],
   dependencies        : [  
                           dependency('sdl2',  required : true),
                           dependency('sdl2_mixer',  required : true),

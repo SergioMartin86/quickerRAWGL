@@ -8,7 +8,7 @@ testSet = [
 # Adding tests to the suite
 foreach testFile : testSet
   test(testFile,
-       quickerRAWTester,
+       quickerRAWGLTester,
        workdir : meson.current_source_dir(),
        timeout: testTimeout,
        args : [ testFile + '.test', testFile + '.sol' ],

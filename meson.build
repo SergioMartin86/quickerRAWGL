@@ -1,4 +1,4 @@
-project('quickerRAW','c','cpp',
+project('quickerRAWGL','c','cpp',
   version: '1.0.0',
   license: 'GPL-3.0-only',
   default_options : ['cpp_std=c++17', 'default_library=shared', 'buildtype=release'],
@@ -23,10 +23,10 @@ jaffarCommonDependency = jaffarCommonSubproject.get_variable('jaffarCommonDepend
 
 if get_option('buildPlayer') == true
 
-  quickerRAWPlayer = executable('quickerRAWPlayer',
+  quickerRAWGLPlayer = executable('quickerRAWGLPlayer',
     'source/player.cpp',
     cpp_args            : [ commonCompileArgs, '-DNCURSES', '-D_JAFFAR_PLAYER' ],
-    dependencies        : [ quickerRAWDependency,
+    dependencies        : [ quickerRAWGLDependency,
                             jaffarCommonDependency
                           ],
     include_directories : include_directories(['source']),
@@ -35,12 +35,12 @@ if get_option('buildPlayer') == true
 
 endif
 
-# Building tester tool for QuickerRAWGL
+# Building tester tool for QuickerRAWGLGL
 
-quickerRAWTester = executable('quickerRAWTester',
+quickerRAWGLTester = executable('quickerRAWGLTester',
   'source/tester.cpp',
   cpp_args            : [ commonCompileArgs ], 
-  dependencies        : [ quickerRAWDependency, jaffarCommonDependency ],
+  dependencies        : [ quickerRAWGLDependency, jaffarCommonDependency ],
 )
 
 # Building tests
