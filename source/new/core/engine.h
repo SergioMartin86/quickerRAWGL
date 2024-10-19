@@ -58,4 +58,10 @@ size_t saveGameState(uint8_t* stateData);
 void loadGameState(const uint8_t* stateData);
 };
 
+struct Scaler {
+	char name[32];
+	int factor;
+};
+
 #endif
+

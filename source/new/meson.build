@@ -19,6 +19,7 @@ quickerRAWSrc =  [
 'core/sfxplayer.cpp',
 'core/staticres.cpp',
 'core/systemstub_sdl.cpp',
+'core/systemstub_dummy.cpp',
 'core/unpack.cpp',
 'core/util.cpp',
 'core/video.cpp',

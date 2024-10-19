@@ -13,6 +13,7 @@
 #include "systemstub.h"
 #include "util.h"
 
+thread_local Scaler scaler;
 
 static const char USAGE[] =
 	"raw(gl) - Another World Interpreter\n"
@@ -95,11 +96,6 @@ static int getGraphicsType(Resource::DataType type) {
 		return GRAPHICS_ORIGINAL;
 	}
 }
-
-struct Scaler {
-	char name[32];
-	int factor;
-};
 
 static void parseScaler(char *name, Scaler *s) {
 	char *sep = strchr(name, '@');

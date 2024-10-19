@@ -16,19 +16,20 @@
 #include <util.h>
 
 extern SystemStub *SystemStub_SDL_create();
-extern thread_local SystemStub *stub ;//= System_SDL_create();
+extern SystemStub *SystemStub_Dummy_create();
+extern thread_local SystemStub *SDLStub ;//= System_SDL_create();
+extern thread_local SystemStub *dummyStub ;//= System_Dummy_create();
 extern thread_local Engine* e;
 extern thread_local Graphics *graphics;
 extern thread_local DisplayMode *dm;
+extern thread_local bool _renderEnabled;
+extern thread_local Scaler scaler;
 
 const int graphicsType = GRAPHICS_SOFTWARE;
+const bool defaultGraphics = true;
+const bool demo3JoyInputs = false;
 
 extern Graphics *createGraphics(int type);
-
-struct Scaler {
-	char name[32];
-	int factor;
-};
 
 static int getGraphicsType(Resource::DataType type) {
 	switch (type) {
@@ -54,6 +55,8 @@ class EmuInstance : public EmuInstanceBase
 
   EmuInstance(const nlohmann::json &config) : EmuInstanceBase(config)
   {
+    scaler.name[0] = 0;
+    scaler.factor = 1;
   }
 
   ~EmuInstance()
@@ -69,6 +72,7 @@ class EmuInstance : public EmuInstanceBase
   {
     int part = 16001;
     Language lang = LANG_FR;
+    _renderEnabled = false;
 
     dm = new DisplayMode;
     dm->mode   = DisplayMode::WINDOWED;
@@ -105,43 +109,39 @@ class EmuInstance : public EmuInstanceBase
         debug(DBG_INFO, "Using original audio");
       }
     }
+
+    g_debugMask = DBG_INFO; // | DBG_VIDEO | DBG_SND | DBG_SCRIPT | DBG_BANK | DBG_SER;
+
+
+     dummyStub = SystemStub_Dummy_create();
+     dummyStub->init(e->getGameTitle(lang), dm);
+     e->setSystemStub(dummyStub, graphics);
+     e->setup(lang, graphicsType, scaler.name, scaler.factor);
   }
 
   void initializeVideoOutput() override
   {
-  	Scaler scaler;
-    scaler.name[0] = 0;
-    scaler.factor = 1;
-    bool defaultGraphics = true;
-    bool demo3JoyInputs = false;
-    g_debugMask = DBG_INFO; // | DBG_VIDEO | DBG_SND | DBG_SCRIPT | DBG_BANK | DBG_SER;
 
-
-    stub = SystemStub_SDL_create();
-    stub->init(e->getGameTitle(lang), dm);
-    e->setSystemStub(stub, graphics);
-    // if (demo3JoyInputs && e->_res.getDataType() == Resource::DT_DOS) {
-    //   e->_res.readDemo3Joy();
-    // }
+    SDLStub = SystemStub_SDL_create();
+    e->setSystemStub(SDLStub, graphics);
+    SDLStub->init(e->getGameTitle(lang), dm);
     e->setup(lang, graphicsType, scaler.name, scaler.factor);
   }
 
   void finalizeVideoOutput() override
   {
-    stub->fini();
-    delete stub;
+    SDLStub->fini();
+    delete SDLStub;
   }
 
   void enableRendering() override
   {
-    // e->vm._doRendering = true;
-    // e->video._doRendering = true;
+    _renderEnabled = true;
   }
 
   void disableRendering() override
   {
-    // e->vm._doRendering = false;
-    // e->video._doRendering = false;
+    _renderEnabled = false;
   }
 
   uint8_t* getPixelsPtr() const override

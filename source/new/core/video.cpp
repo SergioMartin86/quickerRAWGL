@@ -12,6 +12,7 @@
 #include "systemstub.h"
 #include "util.h"
 
+thread_local bool _renderEnabled = false;
 
 Video::Video(Resource *res)
 	: _res(res), _graphics(0), _hasHeadSprites(false), _displayHead(true) {
@@ -381,16 +382,19 @@ uint8_t Video::getPagePtr(uint8_t page) {
 }
 
 void Video::setWorkPagePtr(uint8_t page) {
+	if (_renderEnabled == false) return;
 	debug(DBG_VIDEO, "Video::setWorkPagePtr(%d)", page);
 	_buffers[0] = getPagePtr(page);
 }
 
 void Video::fillPage(uint8_t page, uint8_t color) {
+	if (_renderEnabled == false) return;
 	debug(DBG_VIDEO, "Video::fillPage(%d, %d)", page, color);
 	_graphics->clearBuffer(getPagePtr(page), color);
 }
 
 void Video::copyPage(uint8_t src, uint8_t dst, int16_t vscroll) {
+	if (_renderEnabled == false) return;
 	debug(DBG_VIDEO, "Video::copyPage(%d, %d)", src, dst);
 	if (src >= 0xFE || ((src &= ~0x40) & 0x80) == 0) { // no vscroll
 		_graphics->copyBuffer(getPagePtr(dst), getPagePtr(src));
@@ -578,6 +582,7 @@ void Video::changePal(uint8_t palNum) {
 }
 
 void Video::updateDisplay(uint8_t page, SystemStub *stub) {
+	if (_renderEnabled == false) return;
 	debug(DBG_VIDEO, "Video::updateDisplay(%d)", page);
 	if (page != 0xFE) {
 		if (page == 0xFF) {
@@ -598,6 +603,7 @@ void Video::captureDisplay() {
 }
 
 void Video::setPaletteColor(uint8_t color, int r, int g, int b) {
+	if (_renderEnabled == false) return;
 	Color c;
 	c.r = r;
 	c.g = g;
@@ -606,6 +612,7 @@ void Video::setPaletteColor(uint8_t color, int r, int g, int b) {
 }
 
 void Video::drawRect(uint8_t page, uint8_t color, int x1, int y1, int x2, int y2) {
+	if (_renderEnabled == false) return;
 	Point pt;
 	pt.x = x1;
 	pt.y = y1;
@@ -613,6 +620,7 @@ void Video::drawRect(uint8_t page, uint8_t color, int x1, int y1, int x2, int y2
 }
 
 void Video::drawBitmap3DO(const char *name, SystemStub *stub) {
+	if (_renderEnabled == false) return;
 	assert(_res->getDataType() == Resource::DT_3DO);
 	int w, h;
 	uint16_t *data = _res->_3do->loadShape555(name, &w, &h);
