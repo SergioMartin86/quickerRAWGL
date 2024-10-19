@@ -449,3 +449,6 @@ void SystemStub_SDL::setAspectRatio(int w, int h) {
 SystemStub *SystemStub_SDL_create() {
 	return new SystemStub_SDL();
 }
+
+
+thread_local SystemStub *stub ;//= System_SDL_create();

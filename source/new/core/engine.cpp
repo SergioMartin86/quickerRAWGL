@@ -11,6 +11,8 @@
 #include "systemstub.h"
 #include "util.h"
 
+thread_local Graphics *graphics;
+thread_local DisplayMode *dm;
 
 Engine::Engine(const char *dataDir, int partNum)
 	: _graphics(0), _stub(0), _script(&_mix, &_res, &_ply, &_vid), _mix(&_ply), _res(&_vid, dataDir),
@@ -29,10 +31,10 @@ static const int _restartPos[36 * 2] = {
 	16007, 0
 };
 
-void Engine::setSystemStub(SystemStub *stub, Graphics *graphics) {
+void Engine::setSystemStub(SystemStub *stub, Graphics *pgraphics) {
 	_stub = stub;
 	_script._stub = stub;
-	_graphics = graphics;
+	graphics = pgraphics;
 }
 
 void Engine::run() {
@@ -70,6 +72,7 @@ void Engine::run() {
 }
 
 void Engine::setup(Language lang, int graphicsType, const char *scalerName, int scalerFactor) {
+	_graphics = graphics;
 	_vid._graphics = _graphics;
 	int w = GFX_W * scalerFactor;
 	int h = GFX_H * scalerFactor;
@@ -251,10 +254,10 @@ size_t Engine::saveGameState(uint8_t* stateData)
 {
   size_t pos = 0;
 
-		memcpy(&stateData[pos], &_script._scriptVars,       sizeof(_script._scriptVars));       pos += sizeof(_script._scriptVars);
-		memcpy(&stateData[pos], &_script._scriptStackCalls, sizeof(_script._scriptStackCalls)); pos += sizeof(_script._scriptStackCalls);
-		memcpy(&stateData[pos], &_script._scriptTasks,      sizeof(_script._scriptTasks));      pos += sizeof(_script._scriptTasks);
-		memcpy(&stateData[pos], &_script._scriptStates,     sizeof(_script._scriptStates));     pos += sizeof(_script._scriptStates);
+		if (stateData != nullptr) memcpy(&stateData[pos], &_script._scriptVars,       sizeof(_script._scriptVars));       pos += sizeof(_script._scriptVars);
+		if (stateData != nullptr) memcpy(&stateData[pos], &_script._scriptStackCalls, sizeof(_script._scriptStackCalls)); pos += sizeof(_script._scriptStackCalls);
+		if (stateData != nullptr) memcpy(&stateData[pos], &_script._scriptTasks,      sizeof(_script._scriptTasks));      pos += sizeof(_script._scriptTasks);
+		if (stateData != nullptr) memcpy(&stateData[pos], &_script._scriptStates,     sizeof(_script._scriptStates));     pos += sizeof(_script._scriptStates);
 
 		return pos;
 }
@@ -263,8 +266,11 @@ void Engine::loadGameState(const uint8_t* stateData)
 {
 	 size_t pos = 0;
 
-		memcpy(&_script._scriptVars,       &stateData[pos],  sizeof(_script._scriptVars));       pos += sizeof(_script._scriptVars);
-		memcpy(&_script._scriptStackCalls, &stateData[pos],  sizeof(_script._scriptStackCalls)); pos += sizeof(_script._scriptStackCalls);
-		memcpy(&_script._scriptTasks,      &stateData[pos],  sizeof(_script._scriptTasks));      pos += sizeof(_script._scriptTasks);
-		memcpy(&_script._scriptStates,     &stateData[pos],  sizeof(_script._scriptStates));     pos += sizeof(_script._scriptStates);
+		if (stateData != nullptr) memcpy(&_script._scriptVars,       &stateData[pos],  sizeof(_script._scriptVars));       pos += sizeof(_script._scriptVars);
+		if (stateData != nullptr) memcpy(&_script._scriptStackCalls, &stateData[pos],  sizeof(_script._scriptStackCalls)); pos += sizeof(_script._scriptStackCalls);
+		if (stateData != nullptr) memcpy(&_script._scriptTasks,      &stateData[pos],  sizeof(_script._scriptTasks));      pos += sizeof(_script._scriptTasks);
+		if (stateData != nullptr) memcpy(&_script._scriptStates,     &stateData[pos],  sizeof(_script._scriptStates));     pos += sizeof(_script._scriptStates);
 }
+
+
+thread_local Engine* e;

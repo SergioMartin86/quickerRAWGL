@@ -33,32 +33,14 @@ if get_option('buildPlayer') == true
     link_args           : [ '-lncurses' ],
   )
 
-  baseRAWPlayer = executable('baseRAWPlayer',
-    'source/player.cpp',
-    cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
-    dependencies        : [ baseRAWDependency,
-                            jaffarCommonDependency,
-                          ],
-    include_directories : include_directories(['source']),
-    link_args           : [ '-lncurses' ],
-  )
-
 endif
 
-# Building tester tool for QuickerRAW
+# Building tester tool for QuickerRAWGL
 
 quickerRAWTester = executable('quickerRAWTester',
   'source/tester.cpp',
   cpp_args            : [ commonCompileArgs ], 
   dependencies        : [ quickerRAWDependency, jaffarCommonDependency ],
-)
-
-# Building tester tool for the original RAW
-
-baseRAWTester = executable('baseRAWTester',
-  'source/tester.cpp',
-  cpp_args            : [ commonCompileArgs ],
-  dependencies        : [ baseRAWDependency, jaffarCommonDependency ],
 )
 
 # Building tests

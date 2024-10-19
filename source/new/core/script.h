@@ -15,6 +15,10 @@ struct SfxPlayer;
 struct SystemStub;
 struct Video;
 
+#define VM_NUM_THREADS 64
+#define VM_NUM_VARIABLES 256
+#define NUM_DATA_FIELDS 2
+
 enum Difficulty {
 	DIFFICULTY_EASY = 0,
 	DIFFICULTY_NORMAL = 1,

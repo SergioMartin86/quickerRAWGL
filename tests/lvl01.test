@@ -1,7 +1,7 @@
 {
-  "Initial State File": "lvl01.state",
-  "Disable State Blocks": [ "NVS" ],
-  "Game Data Path": "gameData",
+  "Initial State File": "",
+  "Disable State Blocks": [  ],
+  "Game Data Path": "gameData/amiga",
   "Differential Compression":
   {
     "Enabled": false,

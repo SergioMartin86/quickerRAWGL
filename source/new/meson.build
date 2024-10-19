@@ -1,30 +1,36 @@
 # quickerRAW Core sources
 
 quickerRAWSrc =  [
-  'core/src/bank.cpp',
-  'core/src/sysImplementation.cpp',
-  'core/src/file.cpp',
-  'core/src/vm.cpp',
-  'core/src/staticres.cpp',
-  'core/src/main.cpp',
-  'core/src/resource.cpp',
-  'core/src/sfxplayer.cpp',
-  'core/src/engine.cpp',
-  'core/src/video.cpp',
-  'core/src/serializer.cpp',
-  'core/src/parts.cpp',
-  'core/src/util.cpp',
-  'core/src/mixer.cpp',
+'core/aifcplayer.cpp',
+'core/bitmap.cpp',
+'core/engine.cpp',
+'core/file.cpp',
+'core/graphics_soft.cpp',
+'core/main.cpp',
+'core/mixer.cpp',
+'core/pak.cpp',
+'core/resource_3do.cpp',
+'core/resource.cpp',
+'core/resource_nth.cpp',
+'core/resource_win31.cpp',
+'core/scaler.cpp',
+'core/screenshot.cpp',
+'core/script.cpp',
+'core/sfxplayer.cpp',
+'core/staticres.cpp',
+'core/systemstub_sdl.cpp',
+'core/unpack.cpp',
+'core/util.cpp',
+'core/video.cpp',
 ]
 
 quickerRAWIncludeDirs = [
  '.',
  '..',
- 'core/src'
+ 'core'
 ]
 
 quickerRAWCompileArgs = [
-  '-DAUTO_DETECT_PLATFORM',
   '-DBYPASS_PROTECTION'
 ]
 
@@ -32,9 +38,11 @@ quickerRAWCompileArgs = [
 
  quickerRAWDependency = declare_dependency(
   compile_args        : [  quickerRAWCompileArgs ],
+  link_args           : [  '-lz' ],
   include_directories : include_directories(quickerRAWIncludeDirs),
   sources             : [ quickerRAWSrc ],
   dependencies        : [  
                           dependency('sdl2',  required : true),
+                          dependency('sdl2_mixer',  required : true),
                         ]
  )

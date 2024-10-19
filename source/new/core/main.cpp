@@ -68,7 +68,7 @@ bool Video::_useEGA = false;
 Difficulty Script::_difficulty = DIFFICULTY_NORMAL;
 bool Script::_useRemasteredAudio = true;
 
-static Graphics *createGraphics(int type) {
+Graphics *createGraphics(int type) {
 	switch (type) {
 	case GRAPHICS_ORIGINAL:
 		Graphics::_is1991 = true;
@@ -116,7 +116,7 @@ static void parseScaler(char *name, Scaler *s) {
 static const int DEFAULT_WINDOW_W = 640;
 static const int DEFAULT_WINDOW_H = 400;
 
-int main(int argc, char *argv[]) {
+int old_main(int argc, char *argv[]) {
 	char *dataPath = 0;
 	int part = 16001;
 	Language lang = LANG_FR;
