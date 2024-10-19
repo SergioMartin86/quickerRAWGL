@@ -43,7 +43,6 @@ quickerRAWGLCompileArgs = [
   include_directories : include_directories(quickerRAWGLIncludeDirs),
   sources             : [ quickerRAWGLSrc ],
   dependencies        : [  
-                          dependency('sdl2',  required : true),
-                          dependency('sdl2_mixer',  required : true),
+                          dependency('sdl2',  required : true)
                         ]
  )
