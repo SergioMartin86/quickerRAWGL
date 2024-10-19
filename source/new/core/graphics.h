@@ -53,6 +53,12 @@ struct Graphics {
 	virtual void init(int targetW, int targetH) { _screenshot = false; }
 	virtual void fini() {}
 
+ virtual size_t getColorBufferSize() = 0;
+	virtual size_t getPaletteBufferSize() = 0;
+	virtual Color* getPalettePtr() = 0;
+	virtual uint16_t* getColorBuffer() = 0;
+
+ virtual void dumpColorBuffer(SystemStub *stub) = 0;
 	virtual void setFont(const uint8_t *src, int w, int h) = 0;
 	virtual void setPalette(const Color *colors, int count) = 0;
 	virtual void setSpriteAtlas(const uint8_t *src, int w, int h, int xSize, int ySize) = 0;

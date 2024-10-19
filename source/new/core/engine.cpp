@@ -13,6 +13,7 @@
 
 thread_local Graphics *graphics;
 thread_local DisplayMode *dm;
+extern thread_local bool _renderEnabled;
 
 Engine::Engine(const char *dataDir, int partNum)
 	: _graphics(0), _stub(0), _script(&_mix, &_res, &_ply, &_vid), _mix(&_ply), _res(&_vid, dataDir),
@@ -192,15 +193,15 @@ void Engine::doThreeScreens() {
 	_script.snd_playMusic(1, 0, 0);
 	static const int bitmaps[] = { 67, 68, 69, -1 };
 	for (int i = 0; bitmaps[i] != -1 && !_stub->_pi.quit; ++i) {
-		_res.loadBmp(bitmaps[i]);
-		_vid.updateDisplay(0, _stub);
+		if (_renderEnabled == true) _res.loadBmp(bitmaps[i]);
+		if (_renderEnabled == true) _vid.updateDisplay(0, _stub);
 		while (!_stub->_pi.quit) {
 			_stub->processEvents();
 			if (_stub->_pi.action) {
 				_stub->_pi.action = false;
 				break;
 			}
-			_stub->sleep(50);
+			if (_renderEnabled == true) _stub->sleep(50);
 		}
 	}
 	_state = kStateTitle3DO;
@@ -220,14 +221,14 @@ void Engine::scrollText(int a, int b, const char *text) {
 }
 
 void Engine::titlePage() {
-	_res.loadBmp(70);
+	if (_renderEnabled == true)  _res.loadBmp(70);
 	static const int kCursorColor = 0;
-	_vid.setPaletteColor(kCursorColor, 255, 0, 0);
+if (_renderEnabled == true) 	_vid.setPaletteColor(kCursorColor, 255, 0, 0);
 	static const int yPos[] = { 97, 123, 149 };
 	int y = 0;
 	while (!_stub->_pi.quit) {
-		_vid.copyPage(0, 1, 0);
-		_vid.drawRect(1, kCursorColor, 97, yPos[y], 210, yPos[y + 1]);
+		if (_renderEnabled == true) _vid.copyPage(0, 1, 0);
+		if (_renderEnabled == true) _vid.drawRect(1, kCursorColor, 97, yPos[y], 210, yPos[y + 1]);
 		_stub->processEvents();
 		if (_stub->_pi.dirMask & PlayerInput::DIR_DOWN) {
 			_stub->_pi.dirMask &= ~PlayerInput::DIR_DOWN;
@@ -244,8 +245,8 @@ void Engine::titlePage() {
 			_script.restartAt(_partNum);
 			break;
 		}
-		_vid.updateDisplay(1, _stub);
-		_stub->sleep(50);
+		if (_renderEnabled == true) _vid.updateDisplay(1, _stub);
+		if (_renderEnabled == true) _stub->sleep(50);
 	}
 	_state = kStateGame;
 }

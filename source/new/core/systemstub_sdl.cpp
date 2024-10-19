@@ -410,7 +410,7 @@ void SystemStub_SDL::processEvents() {
 }
 
 void SystemStub_SDL::sleep(uint32_t duration) {
-	SDL_Delay(duration);
+	//SDL_Delay(duration);
 }
 
 uint32_t SystemStub_SDL::getTimeStamp() {

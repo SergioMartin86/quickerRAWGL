@@ -121,7 +121,6 @@ class EmuInstance : public EmuInstanceBase
 
   void initializeVideoOutput() override
   {
-
     SDLStub = SystemStub_SDL_create();
     e->setSystemStub(SDLStub, graphics);
     SDLStub->init(e->getGameTitle(lang), dm);
@@ -146,26 +145,22 @@ class EmuInstance : public EmuInstanceBase
 
   uint8_t* getPixelsPtr() const override
   {
-     return nullptr;
-    //  return stub->getPixelsPtr();
+     return (uint8_t*)graphics->getColorBuffer();
   }
   
   size_t getPixelsSize() const override 
   {
-    return 0;
-    //  return stub->getPixelsSize();
+    return graphics->getColorBufferSize();
   }
   
   uint8_t* getPalettePtr() const override
   {
-    return nullptr;
-    //  return stub->getPalettePtr();
+    return (uint8_t*)graphics->getPalettePtr();
   }
 
   size_t getPaletteSize() const override
   {
-    return 0;
-    //  return stub->getPaletteSize();
+    return graphics->getPaletteBufferSize();
   }
 
   void serializeState(jaffarCommon::serializer::Base& s) const override
@@ -187,8 +182,8 @@ class EmuInstance : public EmuInstanceBase
 
   void updateRenderer() override
   {
-    // stub->applyPalette();
-    // stub->updateRenderer();
+    graphics->dumpColorBuffer(SDLStub);
+    SDLStub->updateScreen();
   }
 
   inline size_t getDifferentialStateSizeImpl() const override { return getStateSizeImpl(); }
@@ -227,11 +222,6 @@ void enableStateBlockImpl(const std::string& block)
   void advanceStateImpl(const jaffar::input_t &input) override
   {
     e->run();
-		// e->_script.checkThreadRequests();
-
-		// e->_script.inp_updatePlayer(input.buttonUp, input.buttonDown, input.buttonLeft, input.buttonRight, input.buttonFire);
-
-		// e->_script.hostFrame();
   }
 
   private:

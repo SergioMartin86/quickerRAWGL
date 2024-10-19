@@ -43,6 +43,12 @@ struct GraphicsSoft: Graphics {
 
 	virtual void init(int targetW, int targetH);
 
+ size_t getColorBufferSize() override{ return _w * _h * sizeof(uint16_t); }
+	size_t getPaletteBufferSize() override{ return sizeof(_pal); }
+	Color* getPalettePtr() override{ return _pal; }
+	uint16_t* getColorBuffer() override { return _colorBuffer; }
+
+ virtual void dumpColorBuffer(SystemStub *stub);
 	virtual void setFont(const uint8_t *src, int w, int h);
 	virtual void setPalette(const Color *colors, int count);
 	virtual void setSpriteAtlas(const uint8_t *src, int w, int h, int xSize, int ySize);
@@ -74,6 +80,7 @@ GraphicsSoft::~GraphicsSoft() {
 	}
 	free(_colorBuffer);
 }
+
 
 void GraphicsSoft::setSize(int w, int h) {
 	_u = (w << 16) / GFX_W;
@@ -465,7 +472,12 @@ void GraphicsSoft::drawBuffer(int num, SystemStub *stub) {
 			_screenshot = false;
 		}
 	}
-	stub->updateScreen();
+	//stub->updateScreen();
+}
+
+void GraphicsSoft::dumpColorBuffer(SystemStub *stub)
+{
+	stub->setScreenPixels555(_colorBuffer, _w, _h);
 }
 
 void GraphicsSoft::drawRect(int num, uint8_t color, const Point *pt, int w, int h) {
@@ -491,7 +503,7 @@ void GraphicsSoft::drawRect(int num, uint8_t color, const Point *pt, int w, int 
 void GraphicsSoft::drawBitmapOverlay(const uint8_t *data, int w, int h, int fmt, SystemStub *stub) {
 	if (fmt == FMT_RGB555) {
 		stub->setScreenPixels555((const uint16_t *)data, w, h);
-		stub->updateScreen();
+		//stub->updateScreen();
 	}
 }
 
