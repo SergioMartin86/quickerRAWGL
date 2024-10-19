@@ -16,7 +16,7 @@ thread_local DisplayMode *dm;
 extern thread_local bool _renderEnabled;
 
 Engine::Engine(const char *dataDir, int partNum)
-	: _graphics(0), _stub(0), _script(&_mix, &_res, &_ply, &_vid), _mix(&_ply), _res(&_vid, dataDir),
+	: _graphics(0), _stub(0), _script(&_res, &_ply, &_vid), _res(&_vid, dataDir),
 	_ply(&_res), _vid(&_res), _partNum(partNum) {
 	_res.detectVersion();
 }
@@ -57,7 +57,6 @@ void Engine::run() {
 		_script.updateInput();
 		processInput();
 		_script.runTasks();
-		_mix.update();
 		if (_res.getDataType() == Resource::DT_3DO) {
 			switch (_res._nextPart) {
 			case 16009:
@@ -101,13 +100,11 @@ void Engine::setup(Language lang, int graphicsType, const char *scalerName, int 
 		_vid.setDefaultFont();
 	}
 	_script.init();
-	MixerType mixerType = kMixerTypeRaw;
 	switch (_res.getDataType()) {
 	case Resource::DT_DOS:
 	case Resource::DT_AMIGA:
 	case Resource::DT_ATARI:
 	case Resource::DT_ATARI_DEMO:
-		mixerType = kMixerTypeRaw;
 		switch (lang) {
 		case LANG_FR:
 			_vid._stringsTable = Video::_stringsTableFr;
@@ -121,13 +118,10 @@ void Engine::setup(Language lang, int graphicsType, const char *scalerName, int 
 	case Resource::DT_WIN31:
 	case Resource::DT_15TH_EDITION:
 	case Resource::DT_20TH_EDITION:
-		mixerType = kMixerTypeWav;
 		break;
 	case Resource::DT_3DO:
-		mixerType = kMixerTypeAiff;
 		break;
 	}
-	_mix.init(mixerType);
 #ifndef BYPASS_PROTECTION
 	switch (_res.getDataType()) {
 	case Resource::DT_DOS:
@@ -160,7 +154,6 @@ void Engine::setup(Language lang, int graphicsType, const char *scalerName, int 
 void Engine::finish() {
 	_graphics->fini();
 	_ply.stop();
-	_mix.quit();
 	_res.freeMemBlock();
 }
 

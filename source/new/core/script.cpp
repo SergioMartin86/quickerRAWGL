@@ -7,7 +7,6 @@
 #include <ctime>
 #include "graphics.h"
 #include "script.h"
-#include "mixer.h"
 #include "resource.h"
 #include "video.h"
 #include "sfxplayer.h"
@@ -15,8 +14,8 @@
 #include "util.h"
 
 
-Script::Script(Mixer *mix, Resource *res, SfxPlayer *ply, Video *vid)
-	: _mix(mix), _res(res), _ply(ply), _vid(vid), _stub(0) {
+Script::Script(Resource *res, SfxPlayer *ply, Video *vid)
+	: _res(res), _ply(ply), _vid(vid), _stub(0) {
 }
 
 void Script::init() {
@@ -363,7 +362,6 @@ void Script::op_updateResources() {
 	debug(DBG_SCRIPT, "Script::op_updateResources(%d)", num);
 	if (num == 0) {
 		_ply->stop();
-		_mix->stopAll();
 		_res->invalidateRes();
 	} else {
 		_res->update(num, preloadSoundCb, this);
@@ -380,7 +378,6 @@ void Script::op_playMusic() {
 
 void Script::restartAt(int part, int pos) {
 	_ply->stop();
-	_mix->stopAll();
 	if (_res->getDataType() == Resource::DT_20TH_EDITION) {
 		_scriptVars[0xBF] = _difficulty; // difficulty (0 to 2)
 		// _scriptVars[0xDB] = 1; // preload sounds (resnum >= 2000)
@@ -743,7 +740,6 @@ static int getSoundFreq(uint8_t period) {
 void Script::snd_playSound(uint16_t resNum, uint8_t freq, uint8_t vol, uint8_t channel) {
 	debug(DBG_SND, "snd_playSound(0x%X, %d, %d, %d)", resNum, freq, vol, channel);
 	if (vol == 0) {
-		_mix->stopSound(channel);
 		return;
 	}
 	if (vol > 63) {
@@ -772,12 +768,10 @@ void Script::snd_playSound(uint16_t resNum, uint8_t freq, uint8_t vol, uint8_t c
 	case Resource::DT_WIN31: {
 			uint8_t *buf = _res->loadWav(resNum);
 			if (buf) {
-				_mix->playSoundWav(channel, buf, getSoundFreq(freq), vol, getWavLooping(resNum));
 			}
 		}
 		break;
 	case Resource::DT_3DO:
-		_mix->playSoundAiff(channel, resNum, vol);
 		break;
 	case Resource::DT_AMIGA:
 	case Resource::DT_ATARI:
@@ -785,7 +779,6 @@ void Script::snd_playSound(uint16_t resNum, uint8_t freq, uint8_t vol, uint8_t c
 	case Resource::DT_DOS: {
 			MemEntry *me = &_res->_memList[resNum];
 			if (me->status == Resource::STATUS_LOADED) {
-				_mix->playSoundRaw(channel, me->bufPtr, getSoundFreq(freq), vol);
 			}
 		}
 		break;
@@ -798,7 +791,6 @@ void Script::snd_playMusic(uint16_t resNum, uint16_t delay, uint8_t pos) {
 	switch (_res->getDataType()) {
 	case Resource::DT_20TH_EDITION:
 		if (resNum == 5000) {
-			_mix->stopMusic();
 			break;
 		}
 		if (resNum >= 5001 && resNum <= 5010) {
@@ -811,19 +803,16 @@ void Script::snd_playMusic(uint16_t resNum, uint16_t delay, uint8_t pos) {
 			char path[MAXPATHLEN];
 			const char *p = _res->getMusicPath(resNum, path, sizeof(path));
 			if (p) {
-				_mix->playMusic(p, loop);
 			}
 		}
 		break;
 	case Resource::DT_3DO:
 		if (resNum == 0) {
-			_mix->stopAifcMusic();
 		} else {
 			uint32_t offset = 0;
 			char path[MAXPATHLEN];
 			const char *p = _res->getMusicPath(resNum, path, sizeof(path), &offset);
 			if (p) {
-				_mix->playAifcMusic(p, offset);
 			}
 		}
 		break;
@@ -831,11 +820,9 @@ void Script::snd_playMusic(uint16_t resNum, uint16_t delay, uint8_t pos) {
 		if (resNum != 0) {
 			_ply->loadSfxModule(resNum, delay, pos);
 			_ply->start();
-			_mix->playSfxMusic(resNum);
 		} else if (delay != 0) {
 			_ply->setEventsDelay(delay);
 		} else {
-			_mix->stopSfxMusic();
 		}
 		break;
 	}
@@ -843,7 +830,6 @@ void Script::snd_playMusic(uint16_t resNum, uint16_t delay, uint8_t pos) {
 
 void Script::snd_preloadSound(uint16_t resNum, const uint8_t *data) {
 	if (_res->getDataType() == Resource::DT_3DO) {
-		_mix->preloadSoundAiff(resNum, data);
 	}
 }
 

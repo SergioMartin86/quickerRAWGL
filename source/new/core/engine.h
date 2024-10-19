@@ -9,7 +9,6 @@
 
 #include "intern.h"
 #include "script.h"
-#include "mixer.h"
 #include "sfxplayer.h"
 #include "resource.h"
 #include "video.h"
@@ -30,7 +29,6 @@ struct Engine {
 	Graphics *_graphics;
 	SystemStub *_stub;
 	Script _script;
-	Mixer _mix;
 	Resource _res;
 	SfxPlayer _ply;
 	Video _vid;

@@ -7,7 +7,6 @@ quickerRAWGLSrc =  [
 'core/file.cpp',
 'core/graphics_soft.cpp',
 'core/main.cpp',
-'core/mixer.cpp',
 'core/pak.cpp',
 'core/resource_3do.cpp',
 'core/resource.cpp',

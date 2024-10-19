@@ -53,7 +53,6 @@ struct Script {
 	static Difficulty _difficulty;
 	static bool _useRemasteredAudio;
 
-	Mixer *_mix;
 	Resource *_res;
 	SfxPlayer *_ply;
 	Video *_vid;
@@ -71,7 +70,7 @@ struct Script {
 	bool _is3DO;
 	uint32_t _startTime, _timeStamp;
 
-	Script(Mixer *mix, Resource *res, SfxPlayer *ply, Video *vid);
+	Script(Resource *res, SfxPlayer *ply, Video *vid);
 	void init();
 
 	void op_movConst();

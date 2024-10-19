@@ -5,7 +5,6 @@
  */
 
 #include "sfxplayer.h"
-#include "mixer.h"
 #include "resource.h"
 #include "systemstub.h"
 #include "util.h"
