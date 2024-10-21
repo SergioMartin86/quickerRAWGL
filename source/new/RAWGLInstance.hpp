@@ -31,17 +31,6 @@ const bool demo3JoyInputs = false;
 
 extern Graphics *createGraphics(int type);
 
-static int getGraphicsType(Resource::DataType type) {
-	switch (type) {
-	case Resource::DT_15TH_EDITION:
-	case Resource::DT_20TH_EDITION:
-	case Resource::DT_3DO:
-		return GRAPHICS_GL;
-	default:
-		return GRAPHICS_ORIGINAL;
-	}
-}
-
 const Language lang = LANG_FR;
 static const int DEFAULT_WINDOW_W = 640;
 static const int DEFAULT_WINDOW_H = 400;
@@ -124,7 +113,6 @@ class EmuInstance : public EmuInstanceBase
     SDLStub = SystemStub_SDL_create();
     e->setSystemStub(SDLStub, graphics);
     SDLStub->init(e->getGameTitle(lang), dm);
-    e->setup(lang, graphicsType, scaler.name, scaler.factor);
   }
 
   void finalizeVideoOutput() override

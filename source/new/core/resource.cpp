@@ -100,30 +100,30 @@ void Resource::detectVersion() {
 	File f;
 	if (check15th(f, _dataDir)) {
 		_dataType = DT_15TH_EDITION;
-		debug(DBG_INFO, "Using 15th anniversary edition data files");
+		// debug(DBG_INFO, "Using 15th anniversary edition data files");
 	} else if (check20th(f, _dataDir)) {
 		_dataType = DT_20TH_EDITION;
-		debug(DBG_INFO, "Using 20th anniversary edition data files");
+		// debug(DBG_INFO, "Using 20th anniversary edition data files");
 	} else if (f.open("memlist.bin", _dataDir)) {
 		_dataType = DT_DOS;
-		debug(DBG_INFO, "Using DOS data files");
+		// debug(DBG_INFO, "Using DOS data files");
 	} else if ((_amigaMemList = detectAmigaAtari(f, _dataDir)) != 0) {
 		if (_amigaMemList == _memListAtariEN) {
 			_dataType = DT_ATARI;
-			debug(DBG_INFO, "Using Atari data files");
+			// debug(DBG_INFO, "Using Atari data files");
 		} else {
 			_dataType = DT_AMIGA;
-			debug(DBG_INFO, "Using Amiga data files");
+			// debug(DBG_INFO, "Using Amiga data files");
 		}
 	} else if (f.open(ResourceWin31::FILENAME, _dataDir)) {
 		_dataType = DT_WIN31;
-		debug(DBG_INFO, "Using Win31 data files");
+		// debug(DBG_INFO, "Using Win31 data files");
 	} else if (check3DO(f, _dataDir)) {
 		_dataType = DT_3DO;
-		debug(DBG_INFO, "Using 3DO data files");
+		// debug(DBG_INFO, "Using 3DO data files");
 	} else if (f.open(atariDemo, _dataDir) && f.size() == 96513) {
 		_dataType = DT_ATARI_DEMO;
-		debug(DBG_INFO, "Using Atari demo file");
+		// debug(DBG_INFO, "Using Atari demo file");
 	} else {
 		error("No data files found in '%s'", _dataDir);
 	}

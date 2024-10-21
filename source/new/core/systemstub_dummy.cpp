@@ -50,8 +50,8 @@ SystemStub_Dummy::SystemStub_Dummy()
 }
 
 void SystemStub_Dummy::init(const char *title, const DisplayMode *dm) {
-	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
-	SDL_ShowCursor(SDL_DISABLE);
+	// SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
+	// SDL_ShowCursor(SDL_DISABLE);
 	// SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
 	// int windowW = 0;
@@ -86,46 +86,33 @@ void SystemStub_Dummy::init(const char *title, const DisplayMode *dm) {
 	}
 	_joystick = 0;
 	_controller = 0;
-	if (SDL_NumJoysticks() > 0) {
-
-#if SDL_COMPILEDVERSION >= SDL_VERSIONNUM(2,0,2)
-		SDL_GameControllerAddMappingsFromFile("gamecontrollerdb.txt");
-#endif
-
-		if (SDL_IsGameController(kJoystickIndex)) {
-			_controller = SDL_GameControllerOpen(kJoystickIndex);
-		}
-		if (!_controller) {
-			_joystick = SDL_JoystickOpen(kJoystickIndex);
-		}
-	}
 	_screenshot = 1;
 	_dm = *dm;
 }
 
 void SystemStub_Dummy::fini() {
-	if (_texture) {
-		// SDL_DestroyTexture(_texture);
-		_texture = 0;
-	}
-	if (_joystick) {
-		SDL_JoystickClose(_joystick);
-		_joystick = 0;
-	}
-	if (_controller) {
-		SDL_GameControllerClose(_controller);
-		_controller = 0;
-	}
-	if (_renderer) {
-		// SDL_DestroyRenderer(_renderer);
-		_renderer = 0;
-	}
-	if (_glcontext) {
-		SDL_GL_DeleteContext(_glcontext);
-		_glcontext = 0;
-	}
-	// SDL_DestroyWindow(_window);
-	SDL_Quit();
+	// if (_texture) {
+	// 	// SDL_DestroyTexture(_texture);
+	// 	_texture = 0;
+	// }
+	// if (_joystick) {
+	// 	SDL_JoystickClose(_joystick);
+	// 	_joystick = 0;
+	// }
+	// if (_controller) {
+	// 	SDL_GameControllerClose(_controller);
+	// 	_controller = 0;
+	// }
+	// if (_renderer) {
+	// 	// SDL_DestroyRenderer(_renderer);
+	// 	_renderer = 0;
+	// }
+	// if (_glcontext) {
+	// 	SDL_GL_DeleteContext(_glcontext);
+	// 	_glcontext = 0;
+	// }
+	// // SDL_DestroyWindow(_window);
+	// SDL_Quit();
 }
 
 void SystemStub_Dummy::prepareScreen(int &w, int &h, float ar[4]) {

@@ -75,10 +75,11 @@ Graphics *createGraphics(int type) {
 		Graphics::_is1991 = true;
 		// fall-through
 	case GRAPHICS_SOFTWARE:
-		debug(DBG_INFO, "Using software graphics");
+		//debug(DBG_INFO, "Using software graphics");
 		return GraphicsSoft_create();
 	case GRAPHICS_GL:
-		debug(DBG_INFO, "Using GL graphics");
+		//debug(DBG_INFO, "Using GL graphics");
+		break;
 #ifdef USE_GL
 		return GraphicsGL_create();
 #endif
